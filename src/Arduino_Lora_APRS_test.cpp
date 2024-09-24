@@ -94,7 +94,7 @@ void readBME() {
 }
 
 /************************************************************************
- *   Builds the packet content
+ *   Builds the WX Packet content
  *************************************************************************/  
 String buildPacket(){
       sprintf(buffer, "t%03dh%02db%05d",
