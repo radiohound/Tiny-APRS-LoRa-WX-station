@@ -7,13 +7,14 @@ Arduino mini 3V3 8MHz and SX1278 LoRa module.
 BME280 on pin A4 SDA & A5 SCL
 */
 #include <SPI.h>
-#include "LoRa.h"
+#include <LoRa.h>
 #include <forcedBMX280.h> // https://github.com/soylentOrange/Forced-BMX280
-#include <LowPower.h>     //https://github.com/LowPowerLab/LowPower
+#include <LowPower.h>     // https://github.com/LowPowerLab/LowPower
+#include <CapacitiveSensor.h> // https://github.com/PaulStoffregen/CapacitiveSensor
 
 #define WITH_SEALEVELCORRECTION // if we want a pressure correction for the given altitude.
 
-const String CALLSIGN  = "TK5EP-12";  // callsign with SSID
+const String CALLSIGN  = "NOCALL-12";  // callsign with SSID
 const String LATITUDE  = "4156.94N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
 const String LONGITUDE = "00845.25E"; // APRS longitude coordinates
 const int ALTITUDE     = 60;          // altitude in meters
@@ -106,7 +107,7 @@ String buildPacket(){
 }
 
 /************************************************************************
- *   Builds the WX DATAS packet
+ *   Builds the Status packet - But this is never sent, conserving battery power for WX Packet only
  *************************************************************************/
 String buildStatus(){
   String datas = CALLSIGN + ">APEP02,WIDE1-1:>Tiny LoRa APRS WX station by TK5EP";
@@ -114,7 +115,7 @@ String buildStatus(){
 }
 
 /************************************************************************
- *   Builds thE WX STATUS load
+ *   Sends the WX Packet over LoRa RF
 ************************************************************************/
 void sendPacket(String packet) {
       while (LoRa.beginPacket() == 0) {
@@ -190,12 +191,6 @@ void setup() {
   LoRa.setCodingRate4(5);
   LoRa.enableCrc();
   LoRa.setTxPower(TXPOWER);
-
-  //LoRa.setSyncWord(0x34);               // 0x34 fot LoRaWan
-  //LoRa.idle();                          // set standby mode
-  //LoRa.disableInvertIQ();
-  //LoRa.sleep(); // mode 0x00 
-  //LoRa.dumpRegisters(Serial);
 
   // read the BME280 sensor
   readBME();
