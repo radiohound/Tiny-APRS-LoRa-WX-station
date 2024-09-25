@@ -43,10 +43,12 @@ float batteryvoltage = 0;
 byte counter=0;
 String packet ="";
 String status ="";
+long totalCapacitance; // current capacitance 
 
 // init object for BME280
 ForcedBME280Float climateSensor = ForcedBME280Float();
-
+// init object for arduino capacitive sensing - only one high ohm resistor required to sense capacitance from arduino - set resistor from pin 4 to pin 8
+CapacitiveSensor   cs_4_8 = CapacitiveSensor(4,8);        // 10M resistor between pins 4 & 8, pin 8 is sensor pin, add a wire and or foil/
 /*******************************
  _____                 _   _                 
 |  ___|   _ _ __   ___| |_(_) ___  _ __  ___ 
@@ -102,7 +104,7 @@ String buildPacket(){
                         humiAPRS,
                         pressAPRS
                         );
-      String packet = CALLSIGN + ">APEP02,WIDE1-1:!" + LATITUDE + "/" + LONGITUDE + "_.../...g..." + buffer + "(Bat=" + batteryvoltage + "V)";
+      String packet = CALLSIGN + ">APEP02,WIDE1-1:!" + LATITUDE + "/" + LONGITUDE + "_.../...g..." + buffer + "(Bat=" + batteryvoltage + "V, Flow=" + totalCapacitance)";
       return packet;
 }
 
@@ -168,6 +170,7 @@ long readVcc() {
                      |_|    
 ******************************/
 void setup() {
+  cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
   Serial.begin(115200);
   while (!Serial) { 
     delay(10);
@@ -229,6 +232,7 @@ void loop() {
   // if number of loops reached
   // we measure, build and transmit
   if (counter == round(TXPERIOD/8)) {
+    totalCapacitance =  cs_4_8.capacitiveSensor(30);
     readBME();
     batteryvoltage = readVcc()/1000.00;
     packet = buildPacket();
