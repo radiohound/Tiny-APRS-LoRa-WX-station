@@ -104,7 +104,7 @@ String buildPacket(){
                         humiAPRS,
                         pressAPRS
                         );
-      String packet = CALLSIGN + ">APEP02,WIDE1-1:!" + LATITUDE + "/" + LONGITUDE + "_.../...g..." + buffer + "(Bat=" + batteryvoltage + "V, Flow=" + totalCapacitance)";
+      String packet = CALLSIGN + ">APEP02,WIDE1-1:!" + LATITUDE + "/" + LONGITUDE + "_.../...g..." + buffer + "(Bat=" + batteryvoltage + "V, Flow=)" + totalCapacitance;
       return packet;
 }
 
@@ -170,7 +170,7 @@ long readVcc() {
                      |_|    
 ******************************/
 void setup() {
-  cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
+  cs_4_8.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
   Serial.begin(115200);
   while (!Serial) { 
     delay(10);
