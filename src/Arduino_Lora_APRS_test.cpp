@@ -9,7 +9,7 @@ method can be used, which causes the water to get deeper when there is higher fl
 angles, such as around 20 degrees can be used to measure very low flow rates. See
 https://www.lmnoeng.com/Weirs/vweir.php for a calculator, and 
 https://www.openchannelflow.com/blog/weirs-how-low-can-you-go to get some more info, or the book
-Field Manual for Research in Agricultural Hydrology for way too much info.
+https://www.tucson.ars.ag.gov/dap/dap_docs/literature/Blue_book.pdf for way too much info.
 
 Arduino mini 3V3 8MHz and SX1278 LoRa module.
 LoRa on pin D10, D4, and D22 from library: LoRa.setPins(10, 4, 22); // pins pour platine uni Pau
