@@ -3,9 +3,19 @@ Tiny WX station
 Test software for an Low power WX station LoRa with Arduino Pro mini with SX1278
 2024-01-16 TK5EP
 
+Modified by K6ATV RadioHound@gmail.com to add capacitive sensing to sense water level 
+Our applicaton is to measure / detect very low flow rates from remote springs. A v-notch weir
+method can be used, which causes the water to get deeper when there is higher flow. Smaller 
+angles, such as around 20 degrees can be used to measure very low flow rates. See
+https://www.lmnoeng.com/Weirs/vweir.php for a calculator, and 
+https://www.openchannelflow.com/blog/weirs-how-low-can-you-go to get some more info, or the book
+Field Manual for Research in Agricultural Hydrology for way too much info.
+
 Arduino mini 3V3 8MHz and SX1278 LoRa module.
+LoRa on pin D10, D4, and D22 from library: LoRa.setPins(10, 4, 22); // pins pour platine uni Pau
 BME280 on pin A4 SDA & A5 SCL
-*/
+CapacitiveSensor using pins D3, D8 (can easily be moved, or more sensing pins added for sensing multiple locations)
+This can produce water flow measurements by using v-notch weir https://www.openchannelflow.com/blog/weirs-how-low-can-you-go*/
 #include <SPI.h>
 #include <LoRa.h>
 #include <forcedBMX280.h> // https://github.com/soylentOrange/Forced-BMX280
