@@ -5,7 +5,7 @@ This project started on jan 17 2024.<br />
 <img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/v_notch.jpg" alt="image" width="450" height="auto">
 <img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/v_notch_water_flow.jpg" alt="image" width="450" height="auto">
 
-Having a few Arduino Pro Mini and SX1278 RFM95W clones laying around, and being more confident now that I have written my "Lora APRS WX station", I wanted to make a test with the Arduino board.<br />
+Having a few Arduino Pro Mini and SX1278 RFM95W clones laying around (https://github.com/CongducPham/LowCostLoRaGw) , and being more confident now that I have written my "Lora APRS WX station", I wanted to make a test with the Arduino board.<br />
 I also had some PCBs ordered past year that I didn't find the time to use.<br />
 
 It took just a few hours behind the keyboard to make a new project come to life, a "Tiny LoRa APRS WX station".<br />
