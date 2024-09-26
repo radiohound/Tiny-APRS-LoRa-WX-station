@@ -14,13 +14,13 @@ BME280 on pin A4 SDA & A5 SCL
 
 #define WITH_SEALEVELCORRECTION // if we want a pressure correction for the given altitude.
 
-const String CALLSIGN  = "NOCALL-12";  // callsign with SSID
-const String LATITUDE  = "4156.94N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
-const String LONGITUDE = "00845.25E"; // APRS longitude coordinates
-const int ALTITUDE     = 60;          // altitude in meters
+const String CALLSIGN  = "NoCall-12";  // callsign with SSID
+const String LATITUDE  = "xx05.83N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
+const String LONGITUDE = "xxx27.08W"; // APRS longitude coordinates
+const int ALTITUDE     = 700;          // altitude in meters
 const long TXFREQUENCY = 433775000;   // Tx frequency in Hz
 const byte TXPOWER     = 20;          // in dBm, output power on the SX1278 module, max 20 dBm
-const int TXPERIOD     = 300;         // in seconds, interval between 2 transmissions
+const int TXPERIOD     = 3600;         // in seconds, interval between 2 transmissions
 
 /********************************************************************
  _____              __ _                       _   _             
@@ -47,8 +47,8 @@ long totalCapacitance; // current capacitance
 
 // init object for BME280
 ForcedBME280Float climateSensor = ForcedBME280Float();
-// init object for arduino capacitive sensing - only one high ohm resistor required to sense capacitance from arduino - set resistor from pin 4 to pin 8
-CapacitiveSensor   cs_4_8 = CapacitiveSensor(4,8);        // 10M resistor between pins 4 & 8, pin 8 is sensor pin, add a wire and or foil/
+// init object for arduino capacitive sensing - only one high ohm resistor required to sense capacitance from arduino - set resistor from pin 3 to pin 8
+CapacitiveSensor   cs_3_8 = CapacitiveSensor(3,8);        // 10M resistor between pins 3 & 8, pin 8 is sensor pin, add a wire and or foil/
 /*******************************
  _____                 _   _                 
 |  ___|   _ _ __   ___| |_(_) ___  _ __  ___ 
@@ -104,7 +104,7 @@ String buildPacket(){
                         humiAPRS,
                         pressAPRS
                         );
-      String packet = CALLSIGN + ">APEP02,WIDE1-1:!" + LATITUDE + "/" + LONGITUDE + "_.../...g..." + buffer + "(Bat=" + batteryvoltage + "V, Flow=)" + totalCapacitance;
+      String packet = CALLSIGN + ">APEP02,WIDE1-1:!" + LATITUDE + "/" + LONGITUDE + "_.../...g..." + buffer + "(Bat=" + batteryvoltage + "V, Flow=" + totalCapacitance + ")";
       return packet;
 }
 
@@ -112,7 +112,7 @@ String buildPacket(){
  *   Builds the Status packet - But this is never sent, conserving battery power for WX Packet only
  *************************************************************************/
 String buildStatus(){
-  String datas = CALLSIGN + ">APEP02,WIDE1-1:>Tiny LoRa APRS WX station by TK5EP";
+  String datas = CALLSIGN + ">APEP02,WIDE1-1:>Coe Park Spike Jones Spring";
   return datas;
 }
 
@@ -170,7 +170,7 @@ long readVcc() {
                      |_|    
 ******************************/
 void setup() {
-  cs_4_8.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
+  cs_3_8.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
   Serial.begin(115200);
   while (!Serial) { 
     delay(10);
@@ -232,7 +232,7 @@ void loop() {
   // if number of loops reached
   // we measure, build and transmit
   if (counter == round(TXPERIOD/8)) {
-    totalCapacitance =  cs_4_8.capacitiveSensor(30);
+    totalCapacitance =  cs_3_8.capacitiveSensor(30);
     readBME();
     batteryvoltage = readVcc()/1000.00;
     packet = buildPacket();
