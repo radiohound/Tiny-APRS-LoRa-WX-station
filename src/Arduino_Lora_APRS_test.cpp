@@ -12,12 +12,17 @@ https://www.openchannelflow.com/blog/weirs-how-low-can-you-go to get some more i
 https://www.tucson.ars.ag.gov/dap/dap_docs/literature/Blue_book.pdf for way too much info.
 
 Arduino mini 3V3 8MHz and SX1278 LoRa module.
-LoRa on pin D10, D4, and D22 from library: LoRa.setPins(10, 4, 22); // pins pour platine uni Pau
+LoRa on pin D10, D4, and D2 from library: LoRa.setPins(10, 4, 2); // pins pour platine uni Pau
+    * (N)SS = 10
+    * RST = 4
+    * DIO0 = 2
+    * DIO1 = 3 - LoRa.h library does not mention this pin ... not sure why
 BME280 on pin A4 SDA & A5 SCL
-CapacitiveSensor using pins D3, D8 (can easily be moved, or more sensing pins added for sensing multiple locations)
+CapacitiveSensor using pins D7, D8 (can easily be moved, or more sensing pins added for sensing multiple locations)
 This can produce water flow measurements by using v-notch weir https://www.openchannelflow.com/blog/weirs-how-low-can-you-go*/
 #include <SPI.h>
-#include <LoRa.h>
+#include <LoRa.h>         //https://github.com/sandeepmistry/arduino-LoRa
+  // I tried using the highly ranked RadioLib library, but could not get the example to fit into the 328P chip - https://github.com/jgromes/RadioLib
 #include <forcedBMX280.h> // https://github.com/soylentOrange/Forced-BMX280
 #include <LowPower.h>     // https://github.com/LowPowerLab/LowPower
 #include <CapacitiveSensor.h> // https://github.com/PaulStoffregen/CapacitiveSensor
@@ -25,8 +30,8 @@ This can produce water flow measurements by using v-notch weir https://www.openc
 #define WITH_SEALEVELCORRECTION // if we want a pressure correction for the given altitude.
 
 const String CALLSIGN  = "NoCall-12";  // callsign with SSID
-const String LATITUDE  = "xx05.83N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
-const String LONGITUDE = "xxx27.08W"; // APRS longitude coordinates
+const String LATITUDE  = "xxxx.83N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
+const String LONGITUDE = "xxxx.08W"; // APRS longitude coordinates
 const int ALTITUDE     = 700;          // altitude in meters
 const long TXFREQUENCY = 433775000;   // Tx frequency in Hz
 const byte TXPOWER     = 20;          // in dBm, output power on the SX1278 module, max 20 dBm
@@ -57,8 +62,8 @@ long totalCapacitance; // current capacitance
 
 // init object for BME280
 ForcedBME280Float climateSensor = ForcedBME280Float();
-// init object for arduino capacitive sensing - only one high ohm resistor required to sense capacitance from arduino - set resistor from pin 3 to pin 8
-CapacitiveSensor   cs_3_8 = CapacitiveSensor(3,8);        // 10M resistor between pins 3 & 8, pin 8 is sensor pin, add a wire and or foil/
+// init object for arduino capacitive sensing - only one high ohm resistor required to sense capacitance from arduino - set resistor from pin 7 to pin 8
+CapacitiveSensor   cs_7_8 = CapacitiveSensor(7,8);        // 10M resistor between pins 7 & 8, pin 8 is sensor pin, add a wire and or foil/
 /*******************************
  _____                 _   _                 
 |  ___|   _ _ __   ___| |_(_) ___  _ __  ___ 
@@ -198,7 +203,7 @@ void setup() {
     while (1);
   }
   Serial.println("LoRa init succeeded.");
-  //LoRa.setPins(10, 4, 22); // pins pour platine uni Pau
+  //LoRa.setPins(10, 4, 2); // This does not seem to be necessary
   LoRa.setSpreadingFactor(12);
   LoRa.setSignalBandwidth(125E3);
   LoRa.setCodingRate4(5);
@@ -207,6 +212,8 @@ void setup() {
 
   // read the BME280 sensor
   readBME();
+  // read the capacitance
+  totalCapacitance =  cs_7_8.capacitiveSensor(30);
   // read the battery voltage
   batteryvoltage = readVcc()/1000.00;
   // build the APRS load
@@ -242,11 +249,13 @@ void loop() {
   // if number of loops reached
   // we measure, build and transmit
   if (counter == round(TXPERIOD/8)) {
-    totalCapacitance =  cs_3_8.capacitiveSensor(30);
+    delay (2000);
+    totalCapacitance =  cs_7_8.capacitiveSensor(30);
     readBME();
     batteryvoltage = readVcc()/1000.00;
     packet = buildPacket();
     sendPacket(packet);
+    //Serial.println(packet);
     counter =0;
     }
  } // end loop
