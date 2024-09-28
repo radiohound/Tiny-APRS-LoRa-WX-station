@@ -31,7 +31,7 @@ This can produce water flow measurements by using v-notch weir https://www.openc
 
 const String CALLSIGN  = "NoCall-12";  // callsign with SSID
 const String LATITUDE  = "xxxx.83N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
-const String LONGITUDE = "xxxx.08W"; // APRS longitude coordinates
+const String LONGITUDE = "xxxxx.08W"; // APRS longitude coordinates
 const int ALTITUDE     = 700;          // altitude in meters
 const long TXFREQUENCY = 433775000;   // Tx frequency in Hz
 const byte TXPOWER     = 20;          // in dBm, output power on the SX1278 module, max 20 dBm
