@@ -11,7 +11,7 @@ https://www.lmnoeng.com/Weirs/vweir.php for a calculator, and
 https://www.openchannelflow.com/blog/weirs-how-low-can-you-go to get some more info, or the book
 https://www.tucson.ars.ag.gov/dap/dap_docs/literature/Blue_book.pdf for way too much info.
 
-Arduino mini 3V3 8MHz and SX1278 LoRa module.
+Arduino mini 3V3 8MHz and SX1278 LoRa module board from: https://github.com/CongducPham/LowCostLoRaGw
 LoRa on pin D10, D4, and D2 from library: LoRa.setPins(10, 4, 2); // pins pour platine uni Pau
     * (N)SS = 10
     * RST = 4
