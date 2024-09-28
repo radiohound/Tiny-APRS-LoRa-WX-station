@@ -185,7 +185,7 @@ long readVcc() {
                      |_|    
 ******************************/
 void setup() {
-  cs_3_8.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
+  cs_7_8.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
   Serial.begin(115200);
   while (!Serial) { 
     delay(10);
