@@ -4,7 +4,7 @@ This project started on jan 17 2024.<br />
 
 <img src="https://github.com/tk5ep/Tiny-APRS-LoRa-WX-station/blob/main/images/tiny_wx_station.jpg" alt="image" width="450" height="auto">
 
-<img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/CapacitiveSense.jpg" alt="image" width="450" height="auto">
+<img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/CapacitiveSense.jpg" alt="image" width="650" height="auto">
 
 <img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/v_notch.jpg" alt="image" width="450" height="auto">
 
