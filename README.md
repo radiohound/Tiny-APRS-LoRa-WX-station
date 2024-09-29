@@ -4,11 +4,11 @@ This project started on jan 17 2024.<br />
 
 <img src="https://github.com/tk5ep/Tiny-APRS-LoRa-WX-station/blob/main/images/tiny_wx_station.jpg" alt="image" width="450" height="auto">
 
+<img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/CapacitiveSense.jpg" alt="image" width="450" height="auto">
+
 <img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/v_notch.jpg" alt="image" width="450" height="auto">
 
 <img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/v_notch_water_flow.jpg" alt="image" width="450" height="auto">
-
-<img src="https://github.com/radiohound/Tiny-APRS-LoRa-WX-station/blob/main/images/CapacitiveSense.jpg" alt="image" width="450" height="auto">
 
 Having a few Arduino Pro Mini and SX1278 RFM95W clones laying around (https://github.com/CongducPham/LowCostLoRaGw)<br />
 and being more confident now that I have written my "Lora APRS WX station", I wanted to make a test with the Arduino board.<br />
