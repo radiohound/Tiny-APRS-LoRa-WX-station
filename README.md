@@ -21,3 +21,8 @@ TK5EP worked to make this project VERY LOW power. Indeed does it consume only 6-
 
 More infos on TK5EP's home page :
 https://www.egloff.eu/
+
+I get some different numbers. It may be that I have Chinese clones of the 328P on the cheap Pro Mini boards I purchased. <br />
+However, the power required for db set to 8 (instead of max 20) should last for what looks like 2 years and 8 months with <br />
+Energizer Ultimate lithium batteries (approx 3000mah) when allowing for outdoor temperatures. See images for measured power. <br />
+
