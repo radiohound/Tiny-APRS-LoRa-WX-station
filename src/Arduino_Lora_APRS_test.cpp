@@ -30,6 +30,7 @@ This can produce water flow measurements by using v-notch weir https://www.openc
 #define WITH_SEALEVELCORRECTION // if we want a pressure correction for the given altitude.
 
 const String CALLSIGN  = "NoCall-12";  // callsign with SSID
+const String STATUS    = "put status text here";
 const String LATITUDE  = "xxxx.83N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
 const String LONGITUDE = "xxxxx.08W"; // APRS longitude coordinates
 const int ALTITUDE     = 700;          // altitude in meters
@@ -127,7 +128,7 @@ String buildPacket(){
  *   Builds the Status packet - But this is never sent, conserving battery power for WX Packet only
  *************************************************************************/
 String buildStatus(){
-  String datas = CALLSIGN + ">APEP02,WIDE1-1:>Coe Park Spike Jones Spring";
+  String datas = CALLSIGN + ">APEP02,WIDE1-1:>" + STATUS;
   return datas;
 }
 
