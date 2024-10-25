@@ -125,7 +125,7 @@ String buildPacket(){
 }
 
 /************************************************************************
- *   Builds the Status packet - But this is never sent, conserving battery power for WX Packet only
+ *   Builds the Status packet - But this is only sent during at startup, conserving battery power for WX Packet only
  *************************************************************************/
 String buildStatus(){
   String datas = CALLSIGN + ">APEP02,WIDE1-1:>" + STATUS;
