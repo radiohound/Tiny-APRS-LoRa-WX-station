@@ -29,6 +29,7 @@ This can produce water flow measurements by using v-notch weir https://www.openc
 
 #define WITH_SEALEVELCORRECTION // if we want a pressure correction for the given altitude.
 
+<<<<<<< HEAD
 const String CALLSIGN  = "K6ATV-16";  // callsign with SSID
 const String STATUS    = "Sierra View Spr";
 const String LATITUDE  = "3711.31N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
@@ -39,6 +40,13 @@ const String LONGITUDE = "12132.48W"; // APRS longitude coordinates
 //3711.43N Willow Tree Sp
 //12133.01W
 const int ALTITUDE     = 853;          // altitude in meters
+=======
+const String CALLSIGN  = "NoCall-12";  // callsign with SSID
+const String STATUS    = "put status text here";
+const String LATITUDE  = "xxxx.83N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
+const String LONGITUDE = "xxxxx.08W"; // APRS longitude coordinates
+const int ALTITUDE     = 700;          // altitude in meters
+>>>>>>> e446649468a2ff4d4ea771df9b56c8713d3f0df9
 const long TXFREQUENCY = 433775000;   // Tx frequency in Hz
 const byte TXPOWER     = 20;          // in dBm, output power on the SX1278 module, max 20 dBm
 const int TXPERIOD     = 1200;         // in seconds, interval between 2 transmissions
@@ -130,7 +138,7 @@ String buildPacket(){
 }
 
 /************************************************************************
- *   Builds the Status packet - But this is never sent, conserving battery power for WX Packet only
+ *   Builds the Status packet - But this is only sent during at startup, conserving battery power for WX Packet only
  *************************************************************************/
 String buildStatus(){
   String datas = CALLSIGN + ">APEP02,WIDE1-1:>" + STATUS;
