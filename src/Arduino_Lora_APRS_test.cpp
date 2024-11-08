@@ -29,13 +29,19 @@ This can produce water flow measurements by using v-notch weir https://www.openc
 
 #define WITH_SEALEVELCORRECTION // if we want a pressure correction for the given altitude.
 
-const String CALLSIGN  = "NoCall-12";  // callsign with SSID
-const String LATITUDE  = "xxxx.83N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
-const String LONGITUDE = "xxxxx.08W"; // APRS longitude coordinates
-const int ALTITUDE     = 700;          // altitude in meters
+const String CALLSIGN  = "K6ATV-16";  // callsign with SSID
+const String STATUS    = "Sierra View Spr";
+const String LATITUDE  = "3711.31N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
+const String LONGITUDE = "12132.48W"; // APRS longitude coordinates
+//3711.31N  Sierra View Sp
+//12132.48W
+
+//3711.43N Willow Tree Sp
+//12133.01W
+const int ALTITUDE     = 853;          // altitude in meters
 const long TXFREQUENCY = 433775000;   // Tx frequency in Hz
 const byte TXPOWER     = 20;          // in dBm, output power on the SX1278 module, max 20 dBm
-const int TXPERIOD     = 3600;         // in seconds, interval between 2 transmissions
+const int TXPERIOD     = 1200;         // in seconds, interval between 2 transmissions
 
 /********************************************************************
  _____              __ _                       _   _             
@@ -91,7 +97,7 @@ void readBME() {
       temperature = climateSensor.getTemperatureCelsiusAsFloat(true);
       pressure    = climateSensor.getPressureAsFloat();
       humidity    = climateSensor.getRelativeHumidityAsFloat();
-      
+      /*
       Serial.print("Temperature: ");
       Serial.print(temperature);
       Serial.println(" °C");
@@ -101,7 +107,7 @@ void readBME() {
       Serial.print("Pressure: ");
       Serial.print(pressure);
       Serial.println(" hPa");
-
+      */
       #ifdef WITH_SEALEVELCORRECTION
           pressure = seaLevelForAltitude(ALTITUDE, pressure);
       #endif
@@ -127,7 +133,7 @@ String buildPacket(){
  *   Builds the Status packet - But this is never sent, conserving battery power for WX Packet only
  *************************************************************************/
 String buildStatus(){
-  String datas = CALLSIGN + ">APEP02,WIDE1-1:>Coe Park Spike Jones Spring";
+  String datas = CALLSIGN + ">APEP02,WIDE1-1:>" + STATUS;
   return datas;
 }
 
@@ -147,7 +153,7 @@ void sendPacket(String packet) {
       LoRa.write(0xFF);
       LoRa.write(0x01);
       
-      Serial.println(packet);
+      //Serial.println(packet);
       //String newPacket = "TK5EP-12>APWXEP,WIDE1-1:>WX station by TK5EP";
       LoRa.write((const uint8_t *)packet.c_str(), packet.length());
       LoRa.endPacket();
@@ -167,10 +173,10 @@ long readVcc() {
       result = ADCL;
       result |= ADCH<<8;
       result = 1126400L / result; // Back-calculate AVcc in mV
-      Serial.print("Voltage = ");
-      Serial.print(result/1000.00);
-      Serial.println(" V");
-	  Serial.flush();
+      //Serial.print("Voltage = ");
+      //Serial.print(result/1000.00);
+      //Serial.println(" V");
+	    //Serial.flush();
       return result;
 }
 
@@ -210,6 +216,7 @@ void setup() {
   LoRa.enableCrc();
   LoRa.setTxPower(TXPOWER);
 
+  
   // read the BME280 sensor
   readBME();
   // read the capacitance
@@ -249,7 +256,7 @@ void loop() {
   // if number of loops reached
   // we measure, build and transmit
   if (counter == round(TXPERIOD/8)) {
-    delay (2000);
+    delay(500);
     totalCapacitance =  cs_7_8.capacitiveSensor(30);
     readBME();
     batteryvoltage = readVcc()/1000.00;
@@ -257,5 +264,9 @@ void loop() {
     sendPacket(packet);
     //Serial.println(packet);
     counter =0;
+    //this does not seem to save power
+    // I am seeing about 2 mA for 8 seconds after each transmission
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+    LoRa.sleep();
     }
  } // end loop
