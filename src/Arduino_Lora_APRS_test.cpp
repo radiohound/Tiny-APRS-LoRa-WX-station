@@ -11,6 +11,22 @@ https://www.lmnoeng.com/Weirs/vweir.php for a calculator, and
 https://www.openchannelflow.com/blog/weirs-how-low-can-you-go to get some more info, or the book
 https://www.tucson.ars.ag.gov/dap/dap_docs/literature/Blue_book.pdf for way too much info.
 
+Convert capacitance reading to Liters Per Minute using v notch weir formula for 20 degree v notch
+https://www.lmnoeng.com/Weirs/vweir.php
+Cubic Foot Per Second = 4.28 * C * TAN(θ/2) * (k + head)^2.5
+discharge coefficient C = 0.607165052 - 0.000874466963 * θ  +  6.10393334x10-6 * θ^2 = 0.5921172861 
+head correction factor k = 0.0089334615
+TAN(θ/2) = TAN(20/2) = .1763
+1 cubic foot per second = 28.3168 * 60 Liters per minute 
+    
+Liters Per Minute = 4.28 * 28.3168 * 60 * C * 0.1763 * (0.0089334615 + head)^2.5
+LPM = 7272 * C * TAN(20/2) * (0.0089334615 + head)^2.5
+LPM = 7272 * .592117 * .1763 * (0.0089334615 + head)^2.5
+LPM = 759 * (0.0089334615 + head)^2.5
+head = totalCapacitance/3243   -- This was calculated by 122 capacitance reading is equivalent to .037 feet head. 122/.037 = 3243 
+
+Resulting formula:  LPM =  759 * pow((0.0089 + i/3243.0),2.5);
+
 Arduino mini 3V3 8MHz and SX1278 LoRa module board from: https://github.com/CongducPham/LowCostLoRaGw
 LoRa on pin D10, D4, and D2 from library: LoRa.setPins(10, 4, 2); // pins pour platine uni Pau
     * (N)SS = 10
@@ -29,7 +45,6 @@ This can produce water flow measurements by using v-notch weir https://www.openc
 
 #define WITH_SEALEVELCORRECTION // if we want a pressure correction for the given altitude.
 
-<<<<<<< HEAD
 const String CALLSIGN  = "K6ATV-16";  // callsign with SSID
 const String STATUS    = "Sierra View Spr";
 const String LATITUDE  = "3711.31N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
@@ -40,13 +55,11 @@ const String LONGITUDE = "12132.48W"; // APRS longitude coordinates
 //3711.43N Willow Tree Sp
 //12133.01W
 const int ALTITUDE     = 853;          // altitude in meters
-=======
 const String CALLSIGN  = "NoCall-12";  // callsign with SSID
 const String STATUS    = "put status text here";
 const String LATITUDE  = "xxxx.83N";  // APRS latitude coordinates. Go on my map to find them htpp://egloff.eu/qralocator
 const String LONGITUDE = "xxxxx.08W"; // APRS longitude coordinates
 const int ALTITUDE     = 700;          // altitude in meters
->>>>>>> e446649468a2ff4d4ea771df9b56c8713d3f0df9
 const long TXFREQUENCY = 433775000;   // Tx frequency in Hz
 const byte TXPOWER     = 20;          // in dBm, output power on the SX1278 module, max 20 dBm
 const int TXPERIOD     = 1200;         // in seconds, interval between 2 transmissions
@@ -64,6 +77,7 @@ const int TXPERIOD     = 1200;         // in seconds, interval between 2 transmi
 float temperature;    // current temperature
 float pressure;       // current pressure
 float humidity;       // current humidity
+float LPM;            // flow rate in LPM
 int tempAPRS  = 0;
 int humiAPRS  = 0;
 int pressAPRS = 0;
@@ -133,7 +147,7 @@ String buildPacket(){
                         humiAPRS,
                         pressAPRS
                         );
-      String packet = CALLSIGN + ">APEP02,WIDE1-1:!" + LATITUDE + "/" + LONGITUDE + "_.../...g..." + buffer + "(Bat=" + batteryvoltage + "V, Flow=" + totalCapacitance + ")";
+      String packet = CALLSIGN + ">APEP02,WIDE1-1:!" + LATITUDE + "/" + LONGITUDE + "_.../...g..." + buffer + "(Bat=" + batteryvoltage + "V, LPM=" + LPM + ")";
       return packet;
 }
 
@@ -266,6 +280,7 @@ void loop() {
   if (counter == round(TXPERIOD/8)) {
     delay(500);
     totalCapacitance =  cs_7_8.capacitiveSensor(30);
+    LPM =  759 * pow((0.0089 + totalCapacitance/3243.0),2.5);
     readBME();
     batteryvoltage = readVcc()/1000.00;
     packet = buildPacket();
